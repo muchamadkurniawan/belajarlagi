@@ -21,7 +21,6 @@ func (repository *YayasanRepositoryImpl) Save(ctx context.Context, tx *sql.Tx, y
 	if err != nil {
 		panic(err)
 	}
-	tx.Commit()
 	id, err1 := result.LastInsertId()
 	if err1 != nil {
 		panic(err1)
@@ -37,7 +36,6 @@ func (repository *YayasanRepositoryImpl) Update(ctx context.Context, tx *sql.Tx,
 	if err != nil {
 		panic(err)
 	}
-	tx.Commit()
 	return yayasan
 }
 
@@ -47,7 +45,6 @@ func (repository *YayasanRepositoryImpl) Delete(ctx context.Context, tx *sql.Tx,
 	if err != nil {
 		panic(err)
 	}
-	tx.Commit()
 }
 
 func (repository *YayasanRepositoryImpl) GetAll(ctx context.Context, tx *sql.Tx) []domain.Yayasan {

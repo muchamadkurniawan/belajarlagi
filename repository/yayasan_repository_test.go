@@ -35,10 +35,10 @@ func TestGetById(t *testing.T) {
 	}
 	repo := NewYayasanRepository()
 	yayasan := domain.Yayasan{}
-	id := 2
+	id := 90
 	yayasan, err1 := repo.GetById(context.Background(), tx, id)
 	if err1 != nil {
-		panic(nil)
+		fmt.Println(err1)
 	}
 	fmt.Println("------------------------")
 	fmt.Println("id yayasan : ", yayasan.Id)
@@ -55,12 +55,13 @@ func TestSaveYayasan(t *testing.T) {
 	}
 
 	var yayasan = domain.Yayasan{
-		Nama:  "uswah1",
-		Uname: "U_uswah1",
-		Pass:  "passUswah1",
+		Nama:  "uswah2",
+		Uname: "U_uswah2",
+		Pass:  "passUswah2",
 	}
 	repo := NewYayasanRepository()
 	save := repo.Save(context.Background(), tx, yayasan)
+	tx.Commit()
 	fmt.Println(save.Id, " ", save.Nama)
 }
 
@@ -78,6 +79,7 @@ func TestUpdateYayasan(t *testing.T) {
 		Pass:  "pass islma",
 	}
 	repo.Update(context.Background(), tx, yayasan)
+	tx.Commit()
 }
 
 func TestDeleteYayasan(t *testing.T) {
@@ -88,7 +90,8 @@ func TestDeleteYayasan(t *testing.T) {
 	}
 	repo := NewYayasanRepository()
 	yayasan := domain.Yayasan{
-		Id: 13,
+		Id: 4,
 	}
 	repo.Delete(context.Background(), tx, yayasan)
+	tx.Commit()
 }
