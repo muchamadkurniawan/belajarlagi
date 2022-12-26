@@ -23,6 +23,5 @@ func main() {
 		Addr:    "localhost:3030",
 		Handler: middleware.NewAuthMiddleware(router),
 	}
-
 	server.ListenAndServe()
 }
