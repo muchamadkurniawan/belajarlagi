@@ -1,0 +1,30 @@
+{{ define "Index" }}
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>Test View Website</title>
+  <meta charset="UTF-8" />
+</head>
+<body>
+<h1>View website for mysql</h1>
+<<h3> akhirnya </h3>
+<table border="1">
+  <tr>
+    <td>FirstName</td>
+    <td>SecondName</td>
+    <td>Department</td>
+    <td>Email</td>
+  </tr>
+  {{ range . }}
+  <tr>
+    <td>{{ .id }}</td>
+    <td> {{ .nama }} </td>
+    <td>{{ .uname }} </td>
+    <td>{{ .pass }} </td>
+  </tr>
+  {{ end }}
+</table>
+
+</body>
+</html>
+{{ end }}

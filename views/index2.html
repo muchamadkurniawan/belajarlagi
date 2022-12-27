@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>testing</title>
+</head>
+<body>
+  <table>
+      <tr>
+          <td>FirstName</td>
+          <td>SecondName</td>
+          <td>Department</td>
+          <td>Email</td>
+      </tr>
+      {{ range . }}
+      <tr>
+          <td>{{ .id }}</td>
+          <td> {{ .nama }} </td>
+          <td>{{ .uname }} </td>
+          <td>{{ .pass }} </td>
+      </tr>
+      {{ end }}
+  </table>
+</body>
+</html>
