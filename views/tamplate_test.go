@@ -130,6 +130,14 @@ func TestViewIndex2(t *testing.T) {
 		}
 	})
 
+	http.HandleFunc("/show", Show)
 	fmt.Println("server started at localhost:9000")
 	http.ListenAndServe(":9000", nil)
+}
+
+func Show(w http.ResponseWriter, r *http.Request) {
+	//db := app.NewDB()
+	nId := r.URL.Query().Get("id")
+	fmt.Println(nId)
+	fmt.Fprint(w, nId)
 }

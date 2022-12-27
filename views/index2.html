@@ -7,10 +7,12 @@
 <body>
   <table>
       <tr>
-          <td>FirstName</td>
-          <td>SecondName</td>
-          <td>Department</td>
-          <td>Email</td>
+          <td>id yayasan</td>
+          <td>nama yayasan</td>
+          <td>uname yayasan</td>
+          <td>pass yayasan</td>
+          <td>update</td>
+          <td>delete</td>
       </tr>
       {{ range . }}
       <tr>
@@ -18,6 +20,12 @@
           <td> {{ .nama }} </td>
           <td>{{ .uname }} </td>
           <td>{{ .pass }} </td>
+          <td>
+              <a href="/show?id={{ .id }}">show</a>
+          </td>
+          <td>
+              <a href="https://www.google.com">delete</a>
+          </td>
       </tr>
       {{ end }}
   </table>
