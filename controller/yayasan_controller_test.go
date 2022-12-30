@@ -12,11 +12,13 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 )
 
 func TestYayasanControllerImpl_FindAll(t *testing.T) {
 	db := app.NewDB()
+
 	validate := validator.New()
 	yayasanRepository := repository.NewYayasanRepository()
 	yayasanService := service.NewYayasanService(yayasanRepository, db, validate)
@@ -48,4 +50,25 @@ func TestYayasanControllerImpl_FindAll(t *testing.T) {
 		fmt.Println("yayasan uname : ", yayasanResponse["uname"])
 		fmt.Println("yayasan pass : ", yayasanResponse["pass"])
 	}
+}
+
+func TestYayasanControllerImpl_FindById(t *testing.T) {
+	db := app.NewDB()
+	validate := validator.New()
+	yayasanRepository := repository.NewYayasanRepository()
+	yayasanService := service.NewYayasanService(yayasanRepository, db, validate)
+	yayasanController := NewYayasanController(yayasanService)
+
+	router := httprouter.New()
+	router.GET("/api/yayasan", yayasanController.FindAll)
+	router.PanicHandler = exception.ErrorHandler
+	var id int = 1
+	request := httptest.NewRequest(http.MethodGet, "http://localhost:3000/api/yayasan/"+strconv.Itoa(id), nil)
+
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	result := recorder.Result()
+	fmt.Println(result)
 }

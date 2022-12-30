@@ -4,8 +4,10 @@ import (
 	"belajarlagi/helper"
 	"belajarlagi/model/web"
 	"belajarlagi/service"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"strconv"
 )
 
 type YayasanControllerImpl struct {
@@ -28,8 +30,24 @@ func (yayasanController *YayasanControllerImpl) Delete(writer http.ResponseWrite
 }
 
 func (yayasanController *YayasanControllerImpl) FindById(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	//TODO implement me
-	panic("implement me")
+	//fmt.Println("ini controller FindById yayasan")
+
+	//fmt.Println("opppo", request.URL.Query().Get("id"))
+	//id := request.URL.Query().Get("id")
+	id := params.ByName("id")
+	//fmt.Println("idddd", id)
+	YayasanId, err := strconv.Atoi(id)
+	if err != nil {
+		panic(err)
+	}
+	yayasanResponse := yayasanController.YayasanService.FindById(request.Context(), YayasanId)
+	fmt.Println("yayasan response", yayasanResponse)
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   yayasanResponse,
+	}
+	helper.WriteToResponseBody(writer, webResponse)
 }
 
 func (yayasanController *YayasanControllerImpl) FindAll(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {

@@ -9,8 +9,8 @@ import (
 func NewRouter(yayasanController controller.YayasanController) *httprouter.Router {
 	router := httprouter.New()
 
-	router.GET("/api/yayasans", yayasanController.FindAll)
-	router.GET("/api/categories/:categoryId", yayasanController.FindById)
+	router.GET("/yayasans", yayasanController.FindAll)
+	router.GET("/show/:id", yayasanController.FindById)
 	router.POST("/api/categories", yayasanController.Create)
 	router.PUT("/api/categories/:categoryId", yayasanController.Update)
 	router.DELETE("/api/categories/:categoryId", yayasanController.Delete)

@@ -135,9 +135,105 @@ func TestViewIndex2(t *testing.T) {
 	http.ListenAndServe(":9000", nil)
 }
 
+func TestGetID_show(t *testing.T) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		var filepath = path.Join("../views", "show.html")
+		tmpl, err := template.ParseFiles(filepath)
+		if err != nil {
+			panic(err)
+		}
+		db := app.NewDB()
+		validate := validator.New()
+		yayasanRepository := repository.NewYayasanRepository()
+		yayasanService := service.NewYayasanService(yayasanRepository, db, validate)
+		yayasanController := controller.NewYayasanController(yayasanService)
+		router := httprouter.New()
+		router.GET("/api/yayasan/:id", yayasanController.FindById)
+
+		router.PanicHandler = exception.ErrorHandler
+
+		request := httptest.NewRequest(http.MethodGet, "http://localhost:9000/api/yayasan/2", nil)
+
+		recorder := httptest.NewRecorder()
+
+		router.ServeHTTP(recorder, request)
+
+		response := recorder.Result()
+		body, _ := io.ReadAll(response.Body)
+		var responseBody map[string]interface{}
+		json.Unmarshal(body, &responseBody)
+		//yayasan := domain.Yayasan{}
+		yayasan := responseBody["data"]
+		tmpl.Execute(w, yayasan)
+	})
+	fmt.Println("server started at localhost:9000")
+	http.ListenAndServe(":9000", nil)
+}
+
 func Show(w http.ResponseWriter, r *http.Request) {
 	//db := app.NewDB()
 	nId := r.URL.Query().Get("id")
 	fmt.Println(nId)
 	fmt.Fprint(w, nId)
+}
+
+func TestYayasanControllerImpl_FindAll(t *testing.T) {
+	db := app.NewDB()
+
+	validate := validator.New()
+	yayasanRepository := repository.NewYayasanRepository()
+	yayasanService := service.NewYayasanService(yayasanRepository, db, validate)
+	yayasanController := controller.NewYayasanController(yayasanService)
+	router := httprouter.New()
+	router.GET("/api/yayasans", yayasanController.FindAll)
+
+	router.PanicHandler = exception.ErrorHandler
+
+	request := httptest.NewRequest(http.MethodGet, "http://localhost:3000/api/yayasans", nil)
+
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	response := recorder.Result()
+
+	body, _ := io.ReadAll(response.Body)
+	var responseBody map[string]interface{}
+	json.Unmarshal(body, &responseBody)
+	fmt.Println(responseBody)
+	var yayasans = responseBody["data"].([]interface{})
+	for index, yayasan := range yayasans {
+		fmt.Println(yayasan)
+		yayasanResponse := yayasans[index].(map[string]interface{})
+		fmt.Println("yayasan id : ", yayasanResponse["id"])
+		fmt.Println("yayasan nama : ", yayasanResponse["nama"])
+		fmt.Println("yayasan uname : ", yayasanResponse["uname"])
+		fmt.Println("yayasan pass : ", yayasanResponse["pass"])
+	}
+}
+
+func TestYayasanControllerImpl_FindByID(t *testing.T) {
+	db := app.NewDB()
+	validate := validator.New()
+	yayasanRepository := repository.NewYayasanRepository()
+	yayasanService := service.NewYayasanService(yayasanRepository, db, validate)
+	yayasanController := controller.NewYayasanController(yayasanService)
+	router := httprouter.New()
+	router.GET("/api/yayasan/:id", yayasanController.FindById)
+
+	router.PanicHandler = exception.ErrorHandler
+
+	request := httptest.NewRequest(http.MethodGet, "http://localhost:9000/api/yayasan/1", nil)
+
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	response := recorder.Result()
+	body, _ := io.ReadAll(response.Body)
+	var responseBody map[string]interface{}
+	json.Unmarshal(body, &responseBody)
+	//yayasan := domain.Yayasan{}
+	yayasan := responseBody["data"]
+	fmt.Println(yayasan)
 }
